@@ -99,7 +99,7 @@ if (document.readyState === 'loading') {
   const dotsContainer = hero.querySelector('.hero__dots');
   if (!dotsContainer) return;
 
-  const sections = ['hero', 'services', 'about', 'success', 'contact']
+  const sections = ['hero', 'services', 'features', 'about', 'success', 'contact']
     .map((id) => document.getElementById(id))
     .filter(Boolean);
 
@@ -231,6 +231,67 @@ if (document.readyState === 'loading') {
     // next: move forward in logical space
     const step = getStep();
     setLogicalScrollLeft(getLogicalScrollLeft() + step);
+    setTimeout(update, 350);
+  });
+
+  list.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', () => setTimeout(update, 100), { passive: true });
+})();
+
+// Contact form is now handled by FormSubmit directly
+
+// Success stories slider controls (RTL aware)
+(function storiesButtons() {
+  const wrap = document.querySelector('.stories-scroller');
+  const list = document.querySelector('.stories-list');
+  if (!wrap || !list) return;
+  const prev = wrap.querySelector('.stories-btn--prev');
+  const next = wrap.querySelector('.stories-btn--next');
+  const isRTL = (document.documentElement.dir || document.body.dir || 'rtl').toLowerCase() === 'rtl';
+
+  function getStep() {
+    const first = list.querySelector(':scope > *');
+    if (!first) return 320;
+    const rect = first.getBoundingClientRect();
+    return Math.round(rect.width + 16);
+  }
+  function max() { return Math.max(0, list.scrollWidth - list.clientWidth); }
+  function clamp(x, min, mx) { return Math.max(min, Math.min(mx, x)); }
+  function getLogical() {
+    const m = max();
+    const raw = list.scrollLeft;
+    if (!isRTL) return raw;
+    if (raw < 0) return -raw; // Chrome
+    return m - raw; // Firefox
+  }
+  function setLogical(v) {
+    const m = max();
+    const val = clamp(v, 0, m);
+    if (!isRTL) { list.scrollTo({ left: val, behavior: 'smooth' }); return; }
+    const raw = list.scrollLeft;
+    const native = raw < 0 ? -val : m - val;
+    list.scrollTo({ left: native, behavior: 'smooth' });
+  }
+  function update() {
+    const m = max();
+    const pos = clamp(getLogical(), 0, m);
+    if (prev) prev.disabled = pos <= 0;
+    if (next) next.disabled = pos >= m - 1;
+  }
+  update();
+
+  prev?.addEventListener('click', () => {
+    const step = getStep();
+    const m = max();
+    const nextPos = getLogical() - step;
+    setLogical(nextPos < 0 ? m : nextPos);
+    setTimeout(update, 350);
+  });
+  next?.addEventListener('click', () => {
+    const step = getStep();
+    const m = max();
+    const nextPos = getLogical() + step;
+    setLogical(nextPos > m ? 0 : nextPos);
     setTimeout(update, 350);
   });
 
