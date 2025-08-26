@@ -251,7 +251,7 @@ if (document.readyState === 'loading') {
 
   function getStep() {
     const first = list.querySelector(':scope > *');
-    if (!first) return 320;
+    if (!first) return 296; // 280px card width + 16px gap
     const rect = first.getBoundingClientRect();
     return Math.round(rect.width + 16);
   }
