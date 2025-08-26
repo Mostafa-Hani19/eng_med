@@ -240,6 +240,78 @@ if (document.readyState === 'loading') {
 
 // Contact form is now handled by FormSubmit directly
 
+// Services carousel functionality
+(function servicesCarousel() {
+  const carouselCards = document.querySelectorAll('.service-carousel-card');
+  const serviceDetails = document.querySelectorAll('.service-detail');
+  const prevBtn = document.querySelector('.services-carousel-btn--prev');
+  const nextBtn = document.querySelector('.services-carousel-btn--next');
+  const carouselList = document.querySelector('.services-carousel-list');
+  
+  if (!carouselCards.length) return;
+
+  let currentIndex = 0;
+
+  function showService(index) {
+    // Update carousel cards
+    carouselCards.forEach((card, i) => {
+      card.classList.toggle('active', i === index);
+    });
+
+    // Update service details
+    serviceDetails.forEach((detail, i) => {
+      detail.classList.toggle('active', i === index);
+    });
+
+    currentIndex = index;
+  }
+
+  // Add click events to carousel cards
+  carouselCards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+      showService(index);
+    });
+  });
+
+  // Navigation buttons
+  prevBtn?.addEventListener('click', () => {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : carouselCards.length - 1;
+    showService(newIndex);
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    const newIndex = currentIndex < carouselCards.length - 1 ? currentIndex + 1 : 0;
+    showService(newIndex);
+  });
+
+  // Auto-scroll carousel
+  function scrollCarousel() {
+    const cardWidth = carouselCards[0].offsetWidth + 16; // card width + gap
+    carouselList.scrollTo({
+      left: currentIndex * cardWidth,
+      behavior: 'smooth'
+    });
+  }
+
+  // Update scroll position when service changes
+  const originalShowService = showService;
+  showService = function(index) {
+    originalShowService(index);
+    setTimeout(scrollCarousel, 100);
+  };
+})();
+
+// Function to scroll to contact section
+function scrollToContact() {
+  const contactSection = document.querySelector('#contact');
+  if (contactSection) {
+    contactSection.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+}
+
 // Success stories slider controls (RTL aware)
 (function storiesButtons() {
   const wrap = document.querySelector('.stories-scroller');
