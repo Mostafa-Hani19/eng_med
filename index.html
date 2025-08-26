@@ -29,23 +29,40 @@
     </div>
   </header>
 
-  <section id="hero" class="hero hero--showcase">
+  <section id="hero" class="hero hero--modern">
     <div class="hero__inner container">
       <div class="hero__col hero__col--text">
-        <h1 class="hero__title">
-          تسويق بإبداع<br>
-          مهندسين... يرفع براندك<br>
-          للمركز الأول
-        </h1>
-        <p class="hero__subtitle">Engineering Creativity to Make Your Brand No.1</p>
-        <a class="btn btn-primary hero__cta" href="#contact">ابدأ الآن</a>
+        <div class="hero__content">
+          <div class="hero__title-container">
+            <h1 class="hero__title">
+              <span class="hero__title-line" data-text="تسويق بإبداع">تسويق بإبداع</span>
+              <span class="hero__title-line" data-text="مهندسين... يرفع براندك">مهندسين... يرفع براندك</span>
+              <span class="hero__title-line hero__highlight" data-text="للمركز الأول">للمركز الأول</span>
+            </h1>
+          </div>
+          <p class="hero__subtitle">Engineering Creativity to Make Your Brand No.1</p>
+          <p class="hero__description">
+            نحن وكالة إعلامية متخصصة في التسويق الرقمي والإعلان، نقدم حلولاً مبتكرة لرفع علامتك التجارية إلى المستوى التالي
+          </p>
+          <div class="hero__buttons">
+            <a class="btn btn-primary hero__cta" href="#services">
+              <a href="#services" class="btn-text">استكشف الخدمات</a>
+              <span class="btn-icon">→</span>
+            </a>
+            <a class="btn btn-secondary hero__cta-secondary" href="#contact">
+              <span class="btn-text">ابدأ الآن</span>
+              <span class="btn-icon">⚡</span>
+            </a>
+          </div>
+        </div>
       </div>
       <div class="hero__divider" aria-hidden="true"></div>
       <div class="hero__col hero__col--media">
         <div class="hero__circle" aria-hidden="true"></div>
-        <img class="hero__image" src="assets/images/1.png" alt="ENG Media" loading="eager" fetchpriority="high">
+        <div class="hero__image-container" data-aos="fade-left" data-aos-delay="400">
+          <img class="hero__image" src="assets/images/1.png" alt="ENG Media" loading="eager" fetchpriority="high">
+        </div>
       </div>
-      <div class="hero__dots" aria-label="التنقل بين الشرائح"></div>
     </div>
   </section>
 
@@ -269,7 +286,6 @@
       <h2 class="section-title">من نحن</h2>
       <p class="lead">فريق من خبراء التسويق والعلاقات العامة يعمل بشغف لمساعدة العلامات التجارية على النمو.</p>
       <div class="grid grid-2 reveal-stagger">
-        <img src="assets/images/2.png" alt="About" loading="lazy">
         <ul class="bullet-list">
           <li>نهج مبني على البيانات</li>
           <li>تصميم وتجربة مستخدم متمركزة حول العميل</li>
@@ -279,7 +295,7 @@
 
       <div class="about-split reveal">
         <div class="media-tile left">
-          <img src="assets/images/18.jpg" alt="Creative team" loading="lazy">
+          <img src="assets/images/18.jpg" alt="Creative team" loading="lazy" width="300" height="300">
         </div>
         <div class="text-tile">
           <h3 class="about-title">Expert team experience</h3>
@@ -387,7 +403,7 @@
     </div>
   </section>
 
-  <section id="success" class="section reveal">
+  <section id="success" class="section reveal stories-section">
     <div class="container">
       <div class="stories-wrap">
       <div class="stories-head">
@@ -401,53 +417,123 @@
       <div class="stories-scroller">
         <button class="stories-btn stories-btn--prev" aria-label="السابق">‹</button>
         <div class="stories-list">
-          <article class="story-card">
+          <article class="story-card story-card-reversed" data-aos="fade-up" data-aos-delay="100">
             <div class="story-media">
               <img src="assets/images/10.png" alt="مشروع تجاري" loading="lazy">
+              <div class="story-overlay">
+                <div class="story-icon">🎯</div>
+              </div>
             </div>
             <div class="story-body">
+              <div class="story-badge">مشروع ناجح</div>
               <h3>مشروع تجاري</h3>
               <p>تصميم هوية بصرية متكاملة</p>
+              <div class="story-stats">
+                <div class="stat-item">
+                  <span class="stat-number">100%</span>
+                  <span class="stat-label">رضا العميل</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">30%</span>
+                  <span class="stat-label">زيادة المبيعات</span>
+                </div>
+              </div>
             </div>
           </article>
 
-          <article class="story-card">
+          <article class="story-card" data-aos="fade-up" data-aos-delay="200">
             <div class="story-media">
               <img src="assets/images/11.png" alt="موقع إلكتروني" loading="lazy">
+              <div class="story-overlay">
+                <div class="story-icon">🌐</div>
+              </div>
             </div>
             <div class="story-body">
+              <div class="story-badge">موقع متطور</div>
               <h3>موقع إلكتروني</h3>
               <p>تطوير موقع متجاوب</p>
+              <div class="story-stats">
+                <div class="stat-item">
+                  <span class="stat-number">85%</span>
+                  <span class="stat-label">تحسين الأداء</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">200%</span>
+                  <span class="stat-label">زيادة الزيارات</span>
+                </div>
+              </div>
             </div>
           </article>
 
-          <article class="story-card">
+          <article class="story-card" data-aos="fade-up" data-aos-delay="300">
             <div class="story-media">
               <img src="assets/images/15.jpg" alt="حملة إعلانية" loading="lazy">
+              <div class="story-overlay">
+                <div class="story-icon">📢</div>
+              </div>
             </div>
             <div class="story-body">
+              <div class="story-badge">حملة متميزة</div>
               <h3>حملة إعلانية</h3>
               <p>إدارة حملة تسويقية</p>
+              <div class="story-stats">
+                <div class="stat-item">
+                  <span class="stat-number">150%</span>
+                  <span class="stat-label">زيادة الوعي</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">40%</span>
+                  <span class="stat-label">تحسين التحويل</span>
+                </div>
+              </div>
             </div>
           </article>
 
-          <article class="story-card">
+          <article class="story-card" data-aos="fade-up" data-aos-delay="400">
             <div class="story-media">
               <img src="assets/images/18.jpg" alt="تطبيق جوال" loading="lazy">
+              <div class="story-overlay">
+                <div class="story-icon">📱</div>
+              </div>
             </div>
             <div class="story-body">
+              <div class="story-badge">تطبيق احترافي</div>
               <h3>تطبيق جوال</h3>
               <p>تطوير تطبيق iOS و Android</p>
+              <div class="story-stats">
+                <div class="stat-item">
+                  <span class="stat-number">4.8⭐</span>
+                  <span class="stat-label">تقييم المستخدمين</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">50K+</span>
+                  <span class="stat-label">تحميلات</span>
+                </div>
+              </div>
             </div>
           </article>
 
-          <article class="story-card">
+          <article class="story-card" data-aos="fade-up" data-aos-delay="500">
             <div class="story-media">
               <img src="assets/images/21.jpg" alt="محتوى إبداعي" loading="lazy">
+              <div class="story-overlay">
+                <div class="story-icon">🎨</div>
+              </div>
             </div>
             <div class="story-body">
+              <div class="story-badge">محتوى إبداعي</div>
               <h3>محتوى إبداعي</h3>
               <p>إنتاج فيديوهات وصور</p>
+              <div class="story-stats">
+                <div class="stat-item">
+                  <span class="stat-number">300%</span>
+                  <span class="stat-label">زيادة التفاعل</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">1M+</span>
+                  <span class="stat-label">مشاهدات</span>
+                </div>
+              </div>
             </div>
           </article>
         </div>
