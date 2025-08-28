@@ -323,7 +323,7 @@ function scrollToContact() {
 
   function getStep() {
     const first = list.querySelector(':scope > *');
-    if (!first) return 296; // 280px card width + 16px gap
+    if (!first) return 436; // 420 card width + 16 gap
     const rect = first.getBoundingClientRect();
     return Math.round(rect.width + 16);
   }
@@ -346,24 +346,26 @@ function scrollToContact() {
   }
   function update() {
     const m = max();
-    const pos = clamp(getLogical(), 0, m);
-    if (prev) prev.disabled = pos <= 0;
-    if (next) next.disabled = pos >= m - 1;
+    // Enable both arrows whenever there is overflow; we support wrap-around
+    const hasOverflow = m > 0;
+    if (prev) prev.disabled = !hasOverflow;
+    if (next) next.disabled = !hasOverflow;
   }
   update();
 
+  // Flip behavior so left arrow (prev) goes visually left and right arrow (next) goes visually right
   prev?.addEventListener('click', () => {
     const step = getStep();
     const m = max();
-    const nextPos = getLogical() - step;
-    setLogical(nextPos < 0 ? m : nextPos);
+    const nextPos = getLogical() + step;
+    setLogical(nextPos > m ? 0 : nextPos);
     setTimeout(update, 350);
   });
   next?.addEventListener('click', () => {
     const step = getStep();
     const m = max();
-    const nextPos = getLogical() + step;
-    setLogical(nextPos > m ? 0 : nextPos);
+    const nextPos = getLogical() - step;
+    setLogical(nextPos < 0 ? m : nextPos);
     setTimeout(update, 350);
   });
 
