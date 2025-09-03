@@ -163,7 +163,8 @@ function setupVideoEnhancements() {
   }
 
   // في حال منع المتصفح التشغيل مع الصوت، أعد المحاولة عند أول تفاعل للمستخدم
-  const retryEvents = ['click', 'touchstart', 'keydown'];
+  // يتضمن أول سكرول/عجلة/سحب باللمس لتفعيل الصوت حسب طلبك
+  const retryEvents = ['click', 'touchstart', 'keydown', 'wheel', 'scroll', 'touchmove'];
   const retryOnce = () => { playWithSound(); retryEvents.forEach((e)=>window.removeEventListener(e, retryOnce)); };
   retryEvents.forEach((e) => window.addEventListener(e, retryOnce, { passive: true, once: true }));
 
