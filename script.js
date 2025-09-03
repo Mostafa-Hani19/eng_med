@@ -46,6 +46,138 @@ if (!('loading' in HTMLImageElement.prototype)) {
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+// تحسين تجربة الفيديو
+function setupVideoEnhancements() {
+  const heroVideo = document.querySelector('.hero__video');
+  if (!heroVideo) return;
+
+  // إضافة تأثير التحميل
+  heroVideo.addEventListener('loadeddata', () => {
+    heroVideo.classList.add('loaded');
+  });
+
+  // تحسين التفاعل مع الفيديو: عند النقر شغّل بالصوت فوراً
+  heroVideo.addEventListener('click', () => {
+    if (heroVideo.paused) {
+      heroVideo.muted = false;
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    } else {
+      heroVideo.pause();
+    }
+  });
+
+  // إضافة تأثيرات عند التشغيل + تأكيد تشغيل الصوت عند بداية التشغيل
+  heroVideo.addEventListener('play', () => {
+    heroVideo.style.filter = 'brightness(1.1) contrast(1.15)';
+    // حاول فك الكتم ثم إعادة التشغيل لضمان الصوت
+    try {
+      heroVideo.muted = false;
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    } catch (_) {}
+  });
+
+  // عند أول إطار تشغيل، تأكد من فك الكتم
+  const ensureAudibleOnce = () => {
+    try {
+      heroVideo.muted = false;
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    } catch (_) {}
+    heroVideo.removeEventListener('playing', ensureAudibleOnce);
+  };
+  heroVideo.addEventListener('playing', ensureAudibleOnce);
+
+  heroVideo.addEventListener('pause', () => {
+    heroVideo.style.filter = 'brightness(1.05) contrast(1.1)';
+  });
+
+  // إضافة تأثير عند التحميل
+  heroVideo.addEventListener('canplay', () => {
+    heroVideo.style.opacity = '1';
+  });
+
+  // محاولة تشغيل فورية قوية عند بدء الصفحة
+  function forceAutoplayMuted() {
+    try {
+      heroVideo.muted = true;
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    } catch (_) {}
+  }
+  forceAutoplayMuted();
+  // إعادة المحاولة على أحداث تحميل وسائط مختلفة
+  ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach((ev) => {
+    heroVideo.addEventListener(ev, forceAutoplayMuted, { once: true });
+  });
+
+  // أدوات مساعدة لتشغيل الفيديو بالصوت
+  function playWithSound() {
+    try {
+      heroVideo.muted = false;
+      const maybePromise = heroVideo.play();
+      if (maybePromise && typeof maybePromise.then === 'function') {
+        return maybePromise.catch(() => {
+          // إذا رفض المتصفح التشغيل التلقائي مع الصوت
+          heroVideo.muted = true;
+        });
+      }
+    } catch (_) {
+      heroVideo.muted = true;
+    }
+  }
+
+  function handleVisibility(isVisible) {
+    if (isVisible) {
+      // عند الظهور: فك الكتم وحاول تشغيله بالصوت
+      playWithSound();
+    } else {
+      // خارج الظهور: استمر بالتشغيل لكن مع كتم الصوت للحفاظ على "تشغيل دائم"
+      heroVideo.muted = true;
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    }
+  }
+
+  // مراقبة الظهور في الشاشة بقيمة تحفيز أقل ليعمل مبكراً
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => handleVisibility(entry.isIntersecting));
+  }, { rootMargin: '0px 0px -20% 0px', threshold: 0.15 });
+  observer.observe(heroVideo);
+
+  // عند تحميل الصفحة: ابدأ التشغيل فوراً (مكتوم) ثم فعّل الصوت عند الظهور
+  function checkInitialVisibility() {
+    const rect = heroVideo.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight * 0.85 && rect.bottom > window.innerHeight * 0.2;
+    // تأكد من التشغيل دائماً
+    heroVideo.muted = true;
+    const p = heroVideo.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+    if (inView) playWithSound();
+  }
+  if (document.readyState === 'complete') {
+    checkInitialVisibility();
+  } else {
+    window.addEventListener('load', checkInitialVisibility, { once: true });
+  }
+
+  // في حال منع المتصفح التشغيل مع الصوت، أعد المحاولة عند أول تفاعل للمستخدم
+  const retryEvents = ['click', 'touchstart', 'keydown'];
+  const retryOnce = () => { playWithSound(); retryEvents.forEach((e)=>window.removeEventListener(e, retryOnce)); };
+  retryEvents.forEach((e) => window.addEventListener(e, retryOnce, { passive: true, once: true }));
+
+  // عند العودة للنافذة أو تبويب المتصفح
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      // إذا كان الفيديو ظاهر حالياً حاول التشغيل بالصوت
+      const rectNow = heroVideo.getBoundingClientRect();
+      const visible = rectNow.top < window.innerHeight && rectNow.bottom > 0;
+      if (visible) playWithSound();
+    }
+  });
+}
+
 // Scroll reveal animations
 function setupReveal() {
   const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
@@ -372,5 +504,8 @@ function scrollToContact() {
   list.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', () => setTimeout(update, 100), { passive: true });
 })();
+
+// تشغيل تحسينات الفيديو
+setupVideoEnhancements();
 
 
